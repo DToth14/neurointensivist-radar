@@ -1,4 +1,6 @@
-name: Refresh neurocritical care jobs and deploy Cloudflare Worker
+  concurrency:
+    group: neuro-radar-refresh
+    cancel-in-progress: falsename: Refresh neurocritical care jobs and deploy Cloudflare Worker
 
 on:
   workflow_dispatch:
