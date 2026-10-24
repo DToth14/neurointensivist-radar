@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+          fetch-depth: 0
 
       - name: Check Cloudflare configuration
         env:
@@ -64,14 +65,42 @@ jobs:
         run: python -m collector.collect
 
       - name: Save detected jobs for next scan
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/jobs.json data/bootstrap.js
-          if ! git diff --cached --quiet; then
+
+          # Keep the scan's output safely outside the checkout before syncing.
+          mkdir -p "$RUNNER_TEMP/neuro-radar-results"
+          cp data/jobs.json "$RUNNER_TEMP/neuro-radar-results/jobs.json"
+          cp data/bootstrap.js "$RUNNER_TEMP/neuro-radar-results/bootstrap.js"
+
+          # Reapply only generated data onto the current remote main branch.
+          # On a race with another commit, retry from the newest remote HEAD.
+          for attempt in 1 2 3 4 5; do
+            echo "Saving job data (attempt $attempt/5)"
+            git fetch origin '+refs/heads/main:refs/remotes/origin/main'
+            git reset --hard origin/main
+            cp "$RUNNER_TEMP/neuro-radar-results/jobs.json" data/jobs.json
+            cp "$RUNNER_TEMP/neuro-radar-results/bootstrap.js" data/bootstrap.js
+            git add -- data/jobs.json data/bootstrap.js
+
+            if git diff --cached --quiet; then
+              echo 'Job data is already up to date.'
+              exit 0
+            fi
+
             git commit -m 'Refresh neurocritical care jobs'
-            git push origin HEAD:main
-          fi
+            if git push origin HEAD:main; then
+              echo 'Refreshed job data saved to main.'
+              exit 0
+            fi
+            echo 'main changed while saving; retrying against the latest commit.'
+            sleep 3
+          done
+          echo 'Could not save job data after five retries.' >&2
+          exit 1
 
       - name: Assemble static website
         run: |
