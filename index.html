@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0a1020" />
+  <meta name="description" content="A focused nationwide dashboard for neurointensivist and neurocritical-care physician positions. Search, filter, save and open original listings." />
+  <title>Neurointensivist Radar | National Physician Job Monitor</title>
+  <link rel="stylesheet" href="app.css" />
+  <script defer src="data/bootstrap.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a href="#/jobs" class="brand" aria-label="Neurointensivist Radar home">
+        <span class="brand-symbol"><svg viewBox="0 0 42 42" role="img" aria-label="Neuro radar logo"><path d="M20 3c-10 0-16 7-16 17s6 18 16 18" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".45"/><path d="M20 9c-7 0-11 5-11 12s4 12 11 12" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".8"/><path d="M20 15c-3.5 0-5 3-5 6s1.5 6 5 6" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M20 20h14m-7-8v17" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="20" cy="20" r="3.7" fill="#55dfc3"/></svg></span>
+        <span class="brand-copy">NEURO<span>RADAR</span><small>PHYSICIAN JOB INTELLIGENCE</small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-group" aria-label="Dashboard views">
+        <button class="nav-item selected" data-nav="jobs"><span class="nav-ico">▦</span>All openings<span class="nav-count" id="sidebarCount">—</span></button>
+        <button class="nav-item" data-nav="new"><span class="nav-ico">✧</span>Newly detected<span class="nav-count" id="sidebarNew">—</span></button>
+        <button class="nav-item" data-nav="saved"><span class="nav-ico">♡</span>Saved jobs<span class="nav-count" id="sidebarSaved">0</span></button>
+        <button class="nav-item" data-nav="insights"><span class="nav-ico">◫</span>Market overview</button>
+        <button class="nav-item" data-nav="sources"><span class="nav-ico">◉</span>Source coverage</button>
+      </nav>
+      <div class="side-spacer"></div>
+      <div class="source-mini">
+        <div class="mini-heading"><span class="dot" id="sidebarDot"></span> SCANNER STATUS</div>
+        <strong id="scannerHeading">Awaiting connection</strong>
+        <p id="scannerSubtext">Verified starter listings. Enable a provider to begin automated scans.</p>
+        <div class="side-meter"><span id="sourceMeter"></span></div>
+      </div>
+      <div class="side-footer">Built for neurocritical care<br><span>United States · 50 states + DC</span></div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="logo-tiny">◎</span> NEURORADAR</div>
+        <div class="crumbs">JOB INTELLIGENCE <span>/</span> NATIONAL SEARCH</div>
+        <div class="top-actions"><span class="status-pill" id="statusPill"><span class="dot"></span> Starter mode</span><button class="icon-btn" id="refreshBtn" title="Reload published data" aria-label="Reload published data">↻</button><button class="top-action" id="shareBtn">↗ <span>Share dashboard</span></button></div>
+      </header>
+      <nav class="mobile-nav" aria-label="Mobile dashboard views">
+        <button data-nav="jobs" class="selected">All jobs</button>
+        <button data-nav="new">New</button>
+        <button data-nav="saved">Saved</button>
+        <button data-nav="insights">Overview</button>
+        <button data-nav="sources">Sources</button>
+      </nav>
+      <div class="page-body">
+        <section class="hero">
+          <div class="hero-detail">PHYSICIAN CAREER MONITOR <span class="tiny-rule"></span> UNITED STATES</div>
+          <h1>Every opportunity.<br><em>One clear view.</em></h1>
+          <p>Discover neurointensivist and neurocritical-care attending positions across monitored job sources. Filter the noise, track what changes, and go directly to the posting.</p>
+          <div class="hero-bottom"><span class="hero-light">✦</span><span id="scanSummary">Preview data · automation not yet active</span><a href="#/sources" id="coverageLink">How coverage works <span>↗</span></a></div>
+          <div class="hero-decoration" aria-hidden="true"><div class="radar-ring ring1"></div><div class="radar-ring ring2"></div><div class="radar-ring ring3"></div><div class="radar-sweep"></div><div class="radar-center"></div><div class="radar-blip a"></div><div class="radar-blip b"></div></div>
+        </section>
+        <section class="metrics" aria-label="National job market statistics">
+          <div class="metric"><span class="metric-label">INDEXED POSITIONS <span class="metric-mark">▦</span></span><strong id="metricTotal">—</strong><small id="metricTotalCaption">From available sources</small></div>
+          <div class="metric"><span class="metric-label">NEWLY DETECTED <span class="metric-mark teal">✧</span></span><strong id="metricNew">—</strong><small>First seen in last 7 days</small></div>
+          <div class="metric"><span class="metric-label">STATES REPRESENTED <span class="metric-mark blue">⌖</span></span><strong id="metricStates">—</strong><small>Based on listing locations</small></div>
+          <div class="metric"><span class="metric-label">LAST SCAN <span class="metric-mark purple">◷</span></span><strong class="metric-time" id="metricScan">—</strong><small id="metricScanCaption">No automated scan yet</small></div>
+        </section>
+        <section class="panel" id="jobsView">
+          <div class="section-heading"><div><div class="eyebrow">LIVE POSITION INDEX</div><h2 id="listingTitle">Explore open positions</h2><p id="resultsDescription">Search across all indexed physician job listings.</p></div><div class="heading-buttons"><button class="subtle-btn" id="exportBtn">⇩ Export CSV</button></div></div>
+          <div class="search-panel">
+            <label class="search-wrap"><span class="search-symbol">⌕</span><input id="searchInput" autocomplete="off" placeholder="Search role, health system, city or keyword..." aria-label="Search job listings" /><span class="search-shortcut">⌘ K</span></label>
+            <div class="filter-row">
+              <label class="select-wrap"><span>LOCATION</span><select id="stateFilter"><option value="all">All states</option></select></label>
+              <label class="select-wrap"><span>POSITION TYPE</span><select id="categoryFilter"><option value="all">All specialties</option><option value="Clinical">Clinical / attending</option><option value="Academic">Academic / faculty</option><option value="Leadership">Leadership</option><option value="Tele-neurocritical">Tele-neurocritical</option></select></label>
+              <label class="select-wrap"><span>FRESHNESS</span><select id="freshFilter"><option value="all">Any date</option><option value="7">Detected ≤ 7 days</option><option value="30">Seen in last 30 days</option></select></label>
+              <label class="select-wrap sort-wrap"><span>SORT BY</span><select id="sortFilter"><option value="recent">Recently seen</option><option value="posted">Latest posted</option><option value="company">Employer A–Z</option><option value="state">State A–Z</option></select></label>
+              <button class="clear-btn" id="clearFilters">Clear filters ↺</button>
+            </div>
+          </div>
+          <div class="results-toolbar"><div><span class="shown-count" id="shownCount">0</span> <span>matching positions</span><span class="toolbar-warning" id="starterWarning">STARTER LISTINGS · NOT RE-SCANNED</span></div><div class="source-swatch"><span class="dot"></span><span>Sources may update at different times</span></div></div>
+          <div class="job-grid" id="jobGrid" aria-live="polite"></div>
+          <div class="empty-state" id="emptyState" hidden><div>◎</div><h3>No matching positions</h3><p>Try removing a filter or searching another neurocritical-care term.</p><button class="subtle-btn" id="resetEmpty">Reset filters</button></div>
+        </section>
+        <section class="panel" id="insightsView" hidden>
+          <div class="section-heading"><div><div class="eyebrow">MARKET OVERVIEW</div><h2>Where positions are appearing</h2><p>Geographic distribution of current indexed listings, not nationwide vacancy totals.</p></div></div>
+          <div class="insights-grid"><div class="insight-card"><h3>Listings by state</h3><div id="stateChart"></div></div><div class="insight-card"><h3>Position focus</h3><div id="categoryChart"></div></div></div>
+        </section>
+        <section class="panel" id="sourcesView" hidden>
+          <div class="section-heading"><div><div class="eyebrow">DATA TRANSPARENCY</div><h2>Sources &amp; monitoring</h2><p>See which feeds are connected and which important specialty sites still need coverage.</p></div></div>
+          <div class="info-banner"><span>ⓘ</span><div><strong>No system can promise every new vacancy instantly.</strong><p>Hospitals, specialty societies and job boards publish at different times. This app refreshes connected sources on its scheduled runs; unconnected, private and blocked sites are not automatically indexed.</p></div></div>
+          <h3 class="subheading">Automated feed health</h3><div id="sourceHealth" class="health-list"></div>
+          <h3 class="subheading">Important additional job sites</h3><p class="source-explainer">Open these sites to catch specialty listings not available through connected APIs. These links alone do not mean the site is automatically monitored.</p>
+          <div class="portals" id="portalList"></div>
+        </section>
+        <footer class="footer"><span>NEURORADAR <span class="footer-dim">/ CAREER INTELLIGENCE</span></span><span>Listings are informational. Verify status, qualifications and pay with each employer. <span class="footer-dim" id="footerDate"></span></span></footer>
+      </div>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
