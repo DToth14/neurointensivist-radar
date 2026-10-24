@@ -1,15 +1,15 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-10-24T17:16:11Z",
+    "generated_at": "2026-10-24T17:42:57Z",
     "mode": "starter",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
     "source_status": [
       {
         "source": "Google Jobs (SerpApi)",
-        "state": "not_configured",
-        "message": "Add SERPAPI_KEY secret"
+        "state": "error",
+        "message": "SerpApi error: Google hasn't returned any results for this query."
       },
       {
         "source": "Adzuna",
