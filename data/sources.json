@@ -5,18 +5,61 @@
   "smartrecruiters": [],
   "workday": [],
   "serpapi_queries": [
-    "neurocritical care physician",
-    "neurointensivist",
-    "neurocritical care medical director",
-    "neuro ICU intensivist"
+    "neurointensivist physician",
+    "neurocritical care physician"
   ],
-  "serpapi_regions": ["United States", "New York, New York", "Chicago, Illinois", "Dallas, Texas", "Los Angeles, California"],
+  "serpapi_regions": [
+    "New York, New York",
+    "Chicago, Illinois",
+    "Los Angeles, California",
+    "Houston, Texas",
+    "Boston, Massachusetts",
+    "Atlanta, Georgia",
+    "Philadelphia, Pennsylvania",
+    "Dallas, Texas",
+    "Seattle, Washington",
+    "Denver, Colorado",
+    "Miami, Florida",
+    "Minneapolis, Minnesota",
+    "Baltimore, Maryland",
+    "Phoenix, Arizona",
+    "Cleveland, Ohio",
+    "San Francisco, California",
+    "New Orleans, Louisiana",
+    "Nashville, Tennessee",
+    "Charlotte, North Carolina",
+    "Detroit, Michigan"
+  ],
   "external_portals": [
-    {"name": "Neurocritical Care Society", "url": "https://www.neurocriticalcare.org/Resources-Publications/Career-Center", "type": "Specialty society"},
-    {"name": "DocCafe • Neurocritical Care", "url": "https://www.doccafe.com/physician-jobs/specialty/neurocritical-care", "type": "Physician job board"},
-    {"name": "PracticeLink", "url": "https://www.practicelink.com/", "type": "Physician job board"},
-    {"name": "PracticeMatch", "url": "https://www.practicematch.com/", "type": "Physician job board"},
-    {"name": "NEJM CareerCenter", "url": "https://www.nejmcareercenter.org/", "type": "Physician job board"},
-    {"name": "USAJOBS", "url": "https://www.usajobs.gov/", "type": "Federal positions"}
+    {
+      "name": "Neurocritical Care Society",
+      "url": "https://www.neurocriticalcare.org/Resources-Publications/Career-Center",
+      "type": "Specialty society"
+    },
+    {
+      "name": "DocCafe \u2022 Neurocritical Care",
+      "url": "https://www.doccafe.com/physician-jobs/specialty/neurocritical-care",
+      "type": "Physician job board"
+    },
+    {
+      "name": "PracticeLink",
+      "url": "https://www.practicelink.com/",
+      "type": "Physician job board"
+    },
+    {
+      "name": "PracticeMatch",
+      "url": "https://www.practicematch.com/",
+      "type": "Physician job board"
+    },
+    {
+      "name": "NEJM CareerCenter",
+      "url": "https://www.nejmcareercenter.org/",
+      "type": "Physician job board"
+    },
+    {
+      "name": "USAJOBS",
+      "url": "https://www.usajobs.gov/",
+      "type": "Federal positions"
+    }
   ]
 }

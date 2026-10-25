@@ -1,0 +1,86 @@
+name: Neuro Radar - hourly scan and deploy
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 7 minutes after each UTC hour. GitHub can delay or skip some runs.
+    - cron: '7 * * * *'
+  push:
+    branches: [main]
+
+permissions:
+  contents: read  # Important: never push generated data back to main.
+
+concurrency:
+  group: neuro-radar-production
+  cancel-in-progress: false
+
+jobs:
+  scan-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Restore latest job snapshot
+        uses: actions/cache/restore@v4
+        with:
+          path: data/jobs.json
+          key: neuro-radar-snapshot-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            neuro-radar-snapshot-v2-
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Scan configured job sources
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          MAX_SERPAPI_QUERIES_PER_RUN: ${{ vars.MAX_SERPAPI_QUERIES_PER_RUN || '1' }}
+          ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
+          ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
+          USAJOBS_API_KEY: ${{ secrets.USAJOBS_API_KEY }}
+          USAJOBS_EMAIL: ${{ secrets.USAJOBS_EMAIL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -m collector.collect
+
+      - name: Save snapshot for next scan (no Git pushes)
+        uses: actions/cache/save@v4
+        with:
+          path: data/jobs.json
+          key: neuro-radar-snapshot-v2-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - name: Prepare public website
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p dist/data
+          cp index.html app.js app.css dist/
+          cp data/jobs.json data/bootstrap.js dist/data/
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('dist/data/jobs.json')
+          obj=json.loads(path.read_text())
+          assert isinstance(obj['jobs'], list)
+          assert obj['meta'].get('last_scan_at'), 'Missing scan timestamp'
+          print('Publishing:', obj['meta']['scan_state'],
+                'sources=',obj['meta']['monitored_sources'], 'jobs=',len(obj['jobs']))
+          PY
+
+      - name: Deploy existing Cloudflare Worker
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

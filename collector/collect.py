@@ -55,6 +55,53 @@ PHYSICIAN = re.compile(r"\b(physician|md/do|m\.d\.|d\.o\.|intensivist|attending|
 TITLE_PREFIX = re.compile(r"\b(?:neuro[ -]?critical|neuro[ -]?intensivist|neuro[ -]?icu)\b", re.I)
 HTML_TAG = re.compile(r"<[^>]+>")
 
+# Conservative classification: a listing only counts as H-1B-sponsored when
+# the job description explicitly offers H-1B sponsorship. Employer history is
+# not considered proof of sponsorship for a specific vacancy.
+H1B = r"h[ -]?1[ -]?b"
+SPONSOR_DENIAL = re.compile(
+    r"(?:\b(?:no|not|without|unable to|cannot|can't|will not|does not|do not|won't)\b.{0,50}\b(?:visa|immigration|sponsor(?:ship|ing)?|" + H1B + r")\b|"
+    r"\b(?:visa|immigration|" + H1B + r")\b.{0,35}\b(?:not available|not offered|not provided|unavailable|ineligible)\b|"
+    r"\b(?:must|need to)\b.{0,70}\b(?:work authorization|authorized to work)\b.{0,45}\bwithout\b.{0,22}\bsponsorship\b|"
+    r"\bsponsorship\b.{0,25}\b(?:not available|not offered|not provided|unavailable)\b)", re.I,
+)
+H1B_DENIAL = re.compile(
+    r"(?:\b(?:no|not|without|unable to|cannot|can\'t|will not|does not|do not|won\'t)\b[^.,;!?]{0,50}\b" + H1B + r"\b|"
+    r"\b" + H1B + r"\b[^.;!?]{0,45}\b(?:not available|not offered|not provided|unavailable|ineligible|cannot be sponsored|not sponsored|no sponsorship)\b)", re.I,
+)
+H1B_OFFER = re.compile(
+    r"(?:\b" + H1B + r"\b[^.;!?]{0,55}\b(?:sponsor(?:ship|ing|ed)?|visa support|support available|eligible for sponsorship|assistance provided)\b|"
+    r"\b(?:sponsor(?:ship|ing|ed)?|visa support|immigration support)\b[^.;!?]{0,55}\b" + H1B + r"\b)", re.I,
+)
+VISA_OFFER = re.compile(
+    r"(?:\bvisa sponsorship\b.{0,30}\b(?:available|offered|provided|considered|welcome|possible)\b|"
+    r"\b(?:offer|provide|available for|consider|support)\b.{0,40}\b(?:visa sponsorship|visa support|immigration sponsorship)\b|"
+    r"\b(?:sponsor|sponsoring)\b.{0,32}\b(?:eligible physicians|international physicians|qualified candidates)\b)", re.I,
+)
+VISA_MENTION = re.compile(r"\b(?:" + H1B + r"|j[ -]?1|visa sponsor(?:ship|ing)?|immigration sponsorship)\b", re.I)
+
+
+def visa_classification(description: str) -> tuple[str, str]:
+    """Return (status, quote from posting); never infer from employer name alone.
+
+    Statuses: h1b_offered, visa_offered, no_sponsorship,
+    needs_review (mentions visas without explicit policy), not_stated.
+    """
+    text = plain(description, 16000)
+    for pattern, status in (
+        (H1B_DENIAL, "no_sponsorship"),
+        (H1B_OFFER, "h1b_offered"),
+        (SPONSOR_DENIAL, "no_sponsorship"),
+        (VISA_OFFER, "visa_offered"),
+        (VISA_MENTION, "needs_review"),
+    ):
+        match = pattern.search(text)
+        if match:
+            start, end = max(0, match.start()-65), min(len(text), match.end()+75)
+            evidence = text[start:end].strip()
+            return status, ("…" if start else "") + evidence + ("…" if end < len(text) else "")
+    return "not_stated", ""
+
 
 def utcnow() -> datetime:
     return datetime.now(UTC)
@@ -131,7 +178,8 @@ def normalize(row: dict, source: str) -> dict | None:
     title, company = plain(row.get("title"), 300), plain(row.get("company"), 200)
     url = clean_url(row.get("url", ""))
     loc = plain(row.get("location"), 200) or "United States (unspecified)"
-    desc = plain(row.get("description", ""))
+    desc = plain(row.get("description", ""), 16000)
+    visa_status, visa_evidence = visa_classification(desc)
     if not (title and url):
         return None
     relevant, confidence = is_physician_job(title, desc)
@@ -156,6 +204,8 @@ def normalize(row: dict, source: str) -> dict | None:
         "workplace": plain(row.get("workplace"), 90),
         "category": categorize(title, desc),
         "confidence": confidence,
+        "visa_status": visa_status,
+        "visa_evidence": visa_evidence,
         "status": "active",
     }
     job["id"] = stable_id(job)
@@ -254,30 +304,69 @@ def from_workday(item: dict) -> list[dict]:
 
 
 def from_serpapi(api_key: str, cfg: dict) -> list[dict]:
-    queries = cfg.get("serpapi_queries") or ["neurointensivist"]
-    regions = cfg.get("serpapi_regions") or ["United States"]
-    combinations = [(q, loc) for q in queries for loc in regions]
-    # Rotate to cover all search terms/regions over time without high per-hour billing.
-    max_scans = min(int(os.getenv("MAX_SERPAPI_QUERIES_PER_RUN", "2")), len(combinations))
-    start = int(utcnow().timestamp() // 3600 * max_scans) % len(combinations)
-    selected = [combinations[(start + i) % len(combinations)] for i in range(max_scans)]
+    """Search a rotating national sample; an empty successful query is not a failure.
+
+    Each run checks a capped number of queries to control API billing. Query
+    coverage is *not* nationwide every hour. The full rotation takes multiple
+    hours; see the source configuration and diagnostics.
+    """
+    queries = cfg.get("serpapi_queries") or ["neurointensivist", "neurocritical care physician"]
+    regions = cfg.get("serpapi_regions") or ["New York, New York"]
+    combinations = [(query, city) for city in regions for query in queries]
+    cap = max(1, min(int(os.getenv("MAX_SERPAPI_QUERIES_PER_RUN", "1")), 10))
+    cap = min(cap, len(combinations))
+    # Group adjacent windows so a region/term isn't repeatedly selected.
+    start = ((int(utcnow().timestamp()) // 3600) * cap) % len(combinations)
+    selected = [combinations[(start + i) % len(combinations)] for i in range(cap)]
     rows = []
-    for q, loc in selected:
-        data = get_json("https://serpapi.com/search.json", {
-            "engine":"google_jobs", "api_key":api_key, "q":q, "location":loc, "hl":"en", "gl":"us"
-        })
-        if data.get("error"):
-            raise RuntimeError(f"SerpApi error: {data['error']}")
-        for p in data.get("jobs_results", []):
-            applications = p.get("apply_options") or []
-            url = next((a.get("link") for a in applications if a.get("link")), "")
-            url = url or p.get("share_link", "")
-            rows.append({"title":p.get("title"), "company":p.get("company_name"), "location":p.get("location"),
-                "url":url, "description":p.get("description"), "salary":(p.get("detected_extensions") or {}).get("salary", ""),
-                "workplace":"Remote" if (p.get("detected_extensions") or {}).get("work_from_home") else "",
-                "posted_at":None})
-        time.sleep(.5)
+    failures, empty = [], 0
+    for query, city in selected:
+        try:
+            data = get_json("https://serpapi.com/search.json", {
+                "engine": "google_jobs", "api_key": api_key, "q": query,
+                "location": city, "hl": "en", "gl": "us"
+            })
+            metadata = data.get("search_metadata") or {}
+            result = data.get("jobs_results") or []
+            error = str(data.get("error") or "")
+            # SerpApi explicitly calls no-results a successful search.
+            if metadata.get("status", "").lower() == "success" and not result:
+                empty += 1
+                LOG.info("Google Jobs: no results for %s | %s", query, city)
+                continue
+            if error:
+                if "hasn't returned any results" in error.lower() or "no results" in error.lower():
+                    empty += 1
+                    LOG.info("Google Jobs: empty for %s | %s", query, city)
+                    continue
+                raise RuntimeError(error)
+            if not isinstance(result, list):
+                raise ValueError("Google Jobs returned unexpected format")
+            if not result:
+                empty += 1
+            for p in result:
+                options = p.get("apply_options") or []
+                url = next((opt.get("link") for opt in options if opt.get("link")), "") or p.get("share_link", "")
+                rows.append({"title": p.get("title"), "company": p.get("company_name"),
+                    "location": p.get("location"), "url": url,
+                    "description": p.get("description"),
+                    "salary": (p.get("detected_extensions") or {}).get("salary", ""),
+                    "workplace": "Remote" if (p.get("detected_extensions") or {}).get("work_from_home") else "",
+                    "posted_at": None})
+            LOG.info("Google Jobs: %d jobs found for %s | %s", len(result), query, city)
+        except (requests.RequestException, RuntimeError, ValueError) as exc:
+            failures.append(f"{city}: {str(exc)[:120]}")
+            LOG.warning("Google Jobs query failure (%s | %s): %s", query, city, exc)
+    QUERY_DIAGNOSTICS.clear()
+    QUERY_DIAGNOSTICS.update({"checked_queries": len(selected), "empty_queries": empty,
+        "failed_queries": len(failures), "rotation_size": len(combinations),
+        "query_failures": failures[:3], "queries_per_run": cap})
+    if len(failures) == len(selected):
+        raise RuntimeError("All selected Google Jobs queries failed: " + " ; ".join(failures[:2]))
     return rows
+
+
+QUERY_DIAGNOSTICS = {}
 
 
 def from_adzuna(app_id: str, app_key: str) -> list[dict]:
@@ -322,6 +411,11 @@ def combine_job(previous: dict, newest: dict, now: str) -> dict:
     merged["posted_at"] = newest.get("posted_at") or previous.get("posted_at")
     merged["salary"] = newest.get("salary") or previous.get("salary") or ""
     merged["description"] = max([previous.get("description", ""), newest.get("description", "")], key=len)
+    # Keep previously observed explicit sponsorship language if the latest
+    # provider excerpt is truncated and has no evidence of a policy change.
+    if newest.get("visa_status") == "not_stated" and previous.get("visa_status") not in (None, "not_stated"):
+        merged["visa_status"] = previous["visa_status"]
+        merged["visa_evidence"] = previous.get("visa_evidence", "")
     merged["status"] = "active"
     return merged
 
@@ -358,15 +452,19 @@ def run() -> dict:
     cfg = json.loads((DATA_DIR / "sources.json").read_text())
     previous = json.loads((DATA_DIR / "jobs.json").read_text())
     earlier = {p["id"]:p for p in previous.get("jobs", [])}
-    # Do not throw away starter listings merely because a vendor is not yet connected.
     output = {**earlier}
+    for prior in output.values():
+        if "visa_status" not in prior:
+            prior["visa_status"], prior["visa_evidence"] = visa_classification(prior.get("description", ""))
     now = iso_now()
     status = []
     fresh_ids = set()
     ok_count = 0
+    configured_count = 0
 
     def ingest(name: str, fn, *args) -> None:
-        nonlocal ok_count
+        nonlocal ok_count, configured_count
+        configured_count += 1
         try:
             rows = fn(*args)
             accepted = 0
@@ -381,10 +479,13 @@ def run() -> dict:
                 fresh_ids.add(identifier)
                 accepted += 1
             ok_count += 1
-            status.append({"source":name,"state":"ok","fetched":len(rows),"matched":accepted})
+            diagnostics = QUERY_DIAGNOSTICS.copy() if name == "Google Jobs (SerpApi)" else {}
+            state = "partial" if diagnostics.get("failed_queries") else "ok"
+            status.append({"source":name,"state":state,"fetched":len(rows),"matched":accepted, **diagnostics})
             LOG.info("%s: fetched %d; physician matches %d",name,len(rows),accepted)
         except (requests.RequestException, ValueError, RuntimeError, KeyError, TypeError) as exc:
-            status.append({"source":name,"state":"error","message":str(exc)[:160]})
+            diagnostics = QUERY_DIAGNOSTICS.copy() if name == "Google Jobs (SerpApi)" else {}
+            status.append({"source":name,"state":"error","message":str(exc)[:160], **diagnostics})
             LOG.warning("%s failed: %s", name, exc)
 
     for category, fetcher in (("greenhouse",from_greenhouse),("lever",from_lever),
@@ -424,13 +525,17 @@ def run() -> dict:
         "meta": {
             "project":"Neurointensivist Radar",
             "generated_at": now,
-            "mode": "live" if ok_count else "starter",
+            "mode": ("live" if ok_count else "error" if configured_count else "setup"),
             "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
             "scan_interval_minutes":60,
+            "scan_state": ("complete" if ok_count else "failed" if configured_count else "unconfigured"),
+            "last_scan_at": now,
+            "data_version": 2,
             "source_status":status,
             "new_detected":len(newest_ids),
             "active_count":sum(1 for j in output.values() if j.get("status") == "active"),
-            "monitored_sources":ok_count
+            "monitored_sources":ok_count,
+            "configured_sources":configured_count
         },
         "jobs": sorted(output.values(), key=lambda j:(j.get("last_seen") or "",j.get("updated_at") or ""),reverse=True)
     }
@@ -453,7 +558,7 @@ if __name__ == "__main__":
         result = run()
         # Distinguish completed-but-unconfigured runs from success in Actions logs.
         if not result["meta"]["monitored_sources"]:
-            LOG.warning("No connected sources succeeded. Starter listings remain visible; configure an API key or ATS board.")
+            LOG.warning("No connected sources succeeded. The dashboard will show diagnostics, not example listings.")
     except Exception:
         LOG.exception("Fatal scanner failure; existing data retained")
         sys.exit(1)

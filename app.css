@@ -4,3 +4,18 @@
 .mobile-nav{display:none}
 @media(max-width:880px){.mobile-nav{display:flex;gap:8px;overflow-x:auto;padding:12px 20px;border-bottom:1px solid #1e2e44;background:#0c1627;scrollbar-width:none}.mobile-nav::-webkit-scrollbar{display:none}.mobile-nav button{border:1px solid #2a3e57;background:#142339;border-radius:7px;color:#9eb3cf;padding:9px 12px;white-space:nowrap;font-size:11px;font-weight:740;flex:none}.mobile-nav button.selected{background:#1e4449;border-color:#396c69;color:#8ff7df}}
 @media(max-width:680px){.mobile-nav{padding:11px 14px;gap:6px}.mobile-nav button{padding:8px 10px;font-size:10px}}
+
+/* Explicit, evidence-based sponsorship filter */
+.visa-disclaimer{color:#8fa3bf;font-size:11px;line-height:1.5;margin:12px 3px 0}
+.job-tag.visa-h1b_offered{background:#173c37;border-color:#2f756b;color:#a0f4df}
+.job-tag.visa-visa_offered{background:#243650;border-color:#4d6794;color:#bed9ff}
+.job-tag.visa-needs_review{background:#3d3527;border-color:#826942;color:#f3d79d}
+.job-tag.visa-no_sponsorship{background:#3a2631;border-color:#764757;color:#f3b9c7}
+.job-tag.visa-not_stated{background:#222b3b;border-color:#39455a;color:#adb9cd}
+.visa-evidence{background:#111d2d;border-left:2px solid #577d8d;color:#afc5d9;padding:9px 11px;margin:4px 0 13px;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+.visa-evidence strong{color:#d4e9f5}
+
+.advanced-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 4px 0;}
+.advanced-row[hidden]{display:none!important;}
+.advanced-row .select-wrap{min-width:260px;max-width:500px;}
+#visaNote[hidden]{display:none!important;}

@@ -1,0 +1,6 @@
+# Intentionally deploy to the existing Worker/domain, NOT Cloudflare Pages.
+name = "neuro33radar"
+compatibility_date = "2026-10-24"
+
+[assets]
+directory = "./dist"

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0a1020" />
-  <meta name="description" content="A focused nationwide dashboard for neurointensivist and neurocritical-care physician positions. Search, filter, save and open original listings." />
+  <meta name="description" content="A national dashboard for neurointensivist physician vacancies. Search, filter, save and open original listings." />
   <title>Neurointensivist Radar | National Physician Job Monitor</title>
   <link rel="stylesheet" href="app.css" />
   <script defer src="data/bootstrap.js"></script>
@@ -29,7 +29,7 @@
       <div class="source-mini">
         <div class="mini-heading"><span class="dot" id="sidebarDot"></span> SCANNER STATUS</div>
         <strong id="scannerHeading">Awaiting connection</strong>
-        <p id="scannerSubtext">Verified starter listings. Enable a provider to begin automated scans.</p>
+        <p id="scannerSubtext">Live sources will appear after the first scheduled scan.</p>
         <div class="side-meter"><span id="sourceMeter"></span></div>
       </div>
       <div class="side-footer">Built for neurocritical care<br><span>United States · 50 states + DC</span></div>
@@ -38,7 +38,7 @@
       <header class="topbar">
         <div class="mobile-brand"><span class="logo-tiny">◎</span> NEURORADAR</div>
         <div class="crumbs">JOB INTELLIGENCE <span>/</span> NATIONAL SEARCH</div>
-        <div class="top-actions"><span class="status-pill" id="statusPill"><span class="dot"></span> Starter mode</span><button class="icon-btn" id="refreshBtn" title="Reload published data" aria-label="Reload published data">↻</button><button class="top-action" id="shareBtn">↗ <span>Share dashboard</span></button></div>
+        <div class="top-actions"><span class="status-pill" id="statusPill"><span class="dot"></span> Awaiting scan</span><button class="icon-btn" id="refreshBtn" title="Reload published data" aria-label="Reload published data">↻</button><button class="top-action" id="shareBtn">↗ <span>Share dashboard</span></button></div>
       </header>
       <nav class="mobile-nav" aria-label="Mobile dashboard views">
         <button data-nav="jobs" class="selected">All jobs</button>
@@ -51,8 +51,8 @@
         <section class="hero">
           <div class="hero-detail">PHYSICIAN CAREER MONITOR <span class="tiny-rule"></span> UNITED STATES</div>
           <h1>Every opportunity.<br><em>One clear view.</em></h1>
-          <p>Discover neurointensivist and neurocritical-care attending positions across monitored job sources. Filter the noise, track what changes, and go directly to the posting.</p>
-          <div class="hero-bottom"><span class="hero-light">✦</span><span id="scanSummary">Preview data · automation not yet active</span><a href="#/sources" id="coverageLink">How coverage works <span>↗</span></a></div>
+          <p>Discover neurointensivist and neurocritical-care attending positions from connected data sources. Filter the noise, track what changes, and go directly to the posting.</p>
+          <div class="hero-bottom"><span class="hero-light">✦</span><span id="scanSummary">Waiting for first scan · deploy and configure data sources</span><a href="#/sources" id="coverageLink">How coverage works <span>↗</span></a></div>
           <div class="hero-decoration" aria-hidden="true"><div class="radar-ring ring1"></div><div class="radar-ring ring2"></div><div class="radar-ring ring3"></div><div class="radar-sweep"></div><div class="radar-center"></div><div class="radar-blip a"></div><div class="radar-blip b"></div></div>
         </section>
         <section class="metrics" aria-label="National job market statistics">
@@ -62,18 +62,22 @@
           <div class="metric"><span class="metric-label">LAST SCAN <span class="metric-mark purple">◷</span></span><strong class="metric-time" id="metricScan">—</strong><small id="metricScanCaption">No automated scan yet</small></div>
         </section>
         <section class="panel" id="jobsView">
-          <div class="section-heading"><div><div class="eyebrow">LIVE POSITION INDEX</div><h2 id="listingTitle">Explore open positions</h2><p id="resultsDescription">Search across all indexed physician job listings.</p></div><div class="heading-buttons"><button class="subtle-btn" id="exportBtn">⇩ Export CSV</button></div></div>
+          <div class="section-heading"><div><div class="eyebrow">COLLECTED POSITION INDEX</div><h2 id="listingTitle">Explore open positions</h2><p id="resultsDescription">Search across all indexed physician job listings.</p></div><div class="heading-buttons"><button class="subtle-btn" id="exportBtn">⇩ Export CSV</button></div></div>
           <div class="search-panel">
             <label class="search-wrap"><span class="search-symbol">⌕</span><input id="searchInput" autocomplete="off" placeholder="Search role, health system, city or keyword..." aria-label="Search job listings" /><span class="search-shortcut">⌘ K</span></label>
             <div class="filter-row">
               <label class="select-wrap"><span>LOCATION</span><select id="stateFilter"><option value="all">All states</option></select></label>
               <label class="select-wrap"><span>POSITION TYPE</span><select id="categoryFilter"><option value="all">All specialties</option><option value="Clinical">Clinical / attending</option><option value="Academic">Academic / faculty</option><option value="Leadership">Leadership</option><option value="Tele-neurocritical">Tele-neurocritical</option></select></label>
               <label class="select-wrap"><span>FRESHNESS</span><select id="freshFilter"><option value="all">Any date</option><option value="7">Detected ≤ 7 days</option><option value="30">Seen in last 30 days</option></select></label>
+              
               <label class="select-wrap sort-wrap"><span>SORT BY</span><select id="sortFilter"><option value="recent">Recently seen</option><option value="posted">Latest posted</option><option value="company">Employer A–Z</option><option value="state">State A–Z</option></select></label>
               <button class="clear-btn" id="clearFilters">Clear filters ↺</button>
+              <button class="clear-btn" type="button" id="advancedToggle" aria-expanded="false" aria-controls="advancedFilters">+ Optional visa filter</button>
             </div>
+            <div id="advancedFilters" hidden class="advanced-row"><label class="select-wrap"><span>VISA SPONSORSHIP · OPTIONAL</span><select id="visaFilter"><option value="all">Any sponsorship status</option><option value="h1b_offered">H-1B explicitly offered</option><option value="visa_offered">Visa offered · type unspecified</option><option value="needs_review">Visa mentioned · verify</option><option value="no_sponsorship">Sponsorship not offered</option><option value="not_stated">Not stated</option></select></label></div>
+            <p class="visa-disclaimer" id="visaNote" hidden>Visa labels reflect explicit language in accessible job descriptions, not verified immigration eligibility. Confirm H-1B sponsorship directly with the employer.</p>
           </div>
-          <div class="results-toolbar"><div><span class="shown-count" id="shownCount">0</span> <span>matching positions</span><span class="toolbar-warning" id="starterWarning">STARTER LISTINGS · NOT RE-SCANNED</span></div><div class="source-swatch"><span class="dot"></span><span>Sources may update at different times</span></div></div>
+          <div class="results-toolbar"><div><span class="shown-count" id="shownCount">0</span> <span>matching positions</span><span class="toolbar-warning" id="starterWarning">SOURCE STATUS IN THE COVERAGE TAB</span></div><div class="source-swatch"><span class="dot"></span><span>Sources may update at different times</span></div></div>
           <div class="job-grid" id="jobGrid" aria-live="polite"></div>
           <div class="empty-state" id="emptyState" hidden><div>◎</div><h3>No matching positions</h3><p>Try removing a filter or searching another neurocritical-care term.</p><button class="subtle-btn" id="resetEmpty">Reset filters</button></div>
         </section>
