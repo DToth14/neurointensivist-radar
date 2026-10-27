@@ -1,21 +1,21 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-10-27T21:31:45Z",
+    "generated_at": "2026-10-27T22:34:03Z",
     "mode": "live",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
     "scan_state": "complete",
-    "last_scan_at": "2026-10-27T21:31:45Z",
+    "last_scan_at": "2026-10-27T22:34:03Z",
     "data_version": 2,
     "source_status": [
       {
         "source": "Google Jobs (SerpApi)",
         "state": "ok",
-        "fetched": 0,
-        "matched": 0,
+        "fetched": 3,
+        "matched": 3,
         "checked_queries": 2,
-        "empty_queries": 2,
+        "empty_queries": 1,
         "failed_queries": 0,
         "rotation_size": 40,
         "query_failures": [],
@@ -32,12 +32,87 @@
         "message": "Add USAJOBS_API_KEY and USAJOBS_EMAIL"
       }
     ],
-    "new_detected": 0,
-    "active_count": 0,
+    "new_detected": 3,
+    "active_count": 3,
     "monitored_sources": 1,
     "configured_sources": 1
   },
   "jobs": [
+    {
+      "title": "Intensivist, Neurocritical Care Intensivist",
+      "company": "TriHealth Physician Partners",
+      "location": "Cincinnati, OH",
+      "state": "OH",
+      "source": "Google Jobs (SerpApi)",
+      "sources": [
+        "Google Jobs (SerpApi)"
+      ],
+      "url": "https://talents.vaia.com/companies/trihealth-physician-partners/cincinnati/intensivist-neurocritical-care-intensivist-81703163",
+      "posted_at": null,
+      "updated_at": null,
+      "description": "Job Description TriHealth Critical Care Medicine is actively recruiting a Neuro-Intensivist. We invite you to join the accomplished multi-disciplinary Neurocritical Care team of eight Neuro-Intensivists as we expand Neurocritical Care services to our Comprehensive Stroke Center (Good Samaritan Hospital) and our Thrombectomy Capable, Trauma, and Mechanical Circulatory Support Center (Bethesda North Hospital). Minimum requirements include: Board-Certified MD or DO with current licensure Neurocritical Care fellowship ",
+      "salary": "",
+      "employment_type": "",
+      "workplace": "",
+      "category": "Clinical",
+      "confidence": "High",
+      "visa_status": "not_stated",
+      "visa_evidence": "",
+      "status": "active",
+      "id": "ncc-29de4128dfc4bb17",
+      "first_seen": "2026-10-27T22:34:03Z",
+      "last_seen": "2026-10-27T22:34:03Z"
+    },
+    {
+      "title": "Neurointensivist",
+      "company": "WellSpan Health",
+      "location": "Pennsylvania",
+      "state": "PA",
+      "source": "Google Jobs (SerpApi)",
+      "sources": [
+        "Google Jobs (SerpApi)"
+      ],
+      "url": "https://bebee.com/us/jobs/neurointensivist-wellspan-health--ss-us-s2hqev",
+      "posted_at": null,
+      "updated_at": null,
+      "description": "Responsibilities WellSpan Health in York, PA is seeking an experienced, board-certified Neurologist with fellowship training in Neurocritical care at WellSpan York Hospital. As both a Level I Trauma Center and a Comprehensive Stroke Center, we care for a high-acuity, diverse patient population. This is an opportunity to be part of an organization that strives to leverage technology and innovation to optimize all aspects of healthcare. The position adds to an existing team of intensivists and is focused on consultat",
+      "salary": "",
+      "employment_type": "",
+      "workplace": "",
+      "category": "Clinical",
+      "confidence": "High",
+      "visa_status": "not_stated",
+      "visa_evidence": "",
+      "status": "active",
+      "id": "ncc-e2c297a7738698b6",
+      "first_seen": "2026-10-27T22:34:03Z",
+      "last_seen": "2026-10-27T22:34:03Z"
+    },
+    {
+      "title": "Neurointensivist",
+      "company": "Mount Sinai",
+      "location": "United States (unspecified)",
+      "state": "REMOTE",
+      "source": "Google Jobs (SerpApi)",
+      "sources": [
+        "Google Jobs (SerpApi)"
+      ],
+      "url": "https://us.jobrapido.com/jobpreview/7312330322081742848",
+      "posted_at": null,
+      "updated_at": null,
+      "description": "The Mount Sinai Health System is recruiting a dynamic, collaborative clinician-researcher or clinician-educator to join a current team of seven neurointensivists within the Division of Neurocritical Care. The division oversees two Neurosciences ICUs, caring for a wide range of neurologically injured patients and managing over 1,000 neurologic emergency cases per year. This transformational opportunity offers a faculty member diverse leadership opportunities in programs spanning intra-operative electrophysiological ",
+      "salary": "",
+      "employment_type": "",
+      "workplace": "",
+      "category": "Clinical",
+      "confidence": "High",
+      "visa_status": "not_stated",
+      "visa_evidence": "",
+      "status": "active",
+      "id": "ncc-ddd2d573b88003fe",
+      "first_seen": "2026-10-27T22:34:03Z",
+      "last_seen": "2026-10-27T22:34:03Z"
+    },
     {
       "title": "Neuro-Intensivist / Anesthesiologist (Assistant/Associate/Full Professor)",
       "company": "OHSU",
