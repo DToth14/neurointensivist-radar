@@ -1,21 +1,21 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-10-29T03:43:25Z",
+    "generated_at": "2026-10-29T04:43:57Z",
     "mode": "live",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
     "scan_state": "complete",
-    "last_scan_at": "2026-10-29T03:43:25Z",
+    "last_scan_at": "2026-10-29T04:43:57Z",
     "data_version": 2,
     "source_status": [
       {
         "source": "Google Jobs (SerpApi)",
         "state": "ok",
-        "fetched": 10,
-        "matched": 5,
+        "fetched": 0,
+        "matched": 0,
         "checked_queries": 2,
-        "empty_queries": 1,
+        "empty_queries": 2,
         "failed_queries": 0,
         "rotation_size": 40,
         "query_failures": [],
@@ -32,8 +32,8 @@
         "message": "Add USAJOBS_API_KEY and USAJOBS_EMAIL"
       }
     ],
-    "new_detected": 5,
-    "active_count": 5,
+    "new_detected": 0,
+    "active_count": 0,
     "monitored_sources": 1,
     "configured_sources": 1
   },
@@ -58,7 +58,7 @@
       "confidence": "High",
       "visa_status": "not_stated",
       "visa_evidence": "",
-      "status": "active",
+      "status": "not_recently_seen",
       "id": "ncc-d04e84cbd2799f0e",
       "first_seen": "2026-10-29T03:43:25Z",
       "last_seen": "2026-10-29T03:43:25Z"
@@ -83,7 +83,7 @@
       "confidence": "High",
       "visa_status": "not_stated",
       "visa_evidence": "",
-      "status": "active",
+      "status": "not_recently_seen",
       "id": "ncc-411207422c79c342",
       "first_seen": "2026-10-29T03:43:25Z",
       "last_seen": "2026-10-29T03:43:25Z"
@@ -108,7 +108,7 @@
       "confidence": "Medium",
       "visa_status": "not_stated",
       "visa_evidence": "",
-      "status": "active",
+      "status": "not_recently_seen",
       "id": "ncc-e92d61789dbc9823",
       "first_seen": "2026-10-29T03:43:25Z",
       "last_seen": "2026-10-29T03:43:25Z"
@@ -133,7 +133,7 @@
       "confidence": "Medium",
       "visa_status": "not_stated",
       "visa_evidence": "",
-      "status": "active",
+      "status": "not_recently_seen",
       "id": "ncc-33d3e9d3d0b04933",
       "first_seen": "2026-10-29T03:43:25Z",
       "last_seen": "2026-10-29T03:43:25Z"
@@ -158,7 +158,7 @@
       "confidence": "Medium",
       "visa_status": "not_stated",
       "visa_evidence": "",
-      "status": "active",
+      "status": "not_recently_seen",
       "id": "ncc-bf14f862fd2d177f",
       "first_seen": "2026-10-29T03:43:25Z",
       "last_seen": "2026-10-29T03:43:25Z"
