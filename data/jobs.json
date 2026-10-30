@@ -1,12 +1,12 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-10-30T20:35:12Z",
+    "generated_at": "2026-10-30T21:33:31Z",
     "mode": "live",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
     "scan_state": "complete",
-    "last_scan_at": "2026-10-30T20:35:12Z",
+    "last_scan_at": "2026-10-30T21:33:31Z",
     "data_version": 2,
     "source_status": [
       {
