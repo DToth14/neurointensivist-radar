@@ -1,26 +1,24 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-10-30T12:47:32Z",
+    "generated_at": "2026-10-30T13:56:21Z",
     "mode": "live",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
     "scan_state": "complete",
-    "last_scan_at": "2026-10-30T12:47:32Z",
+    "last_scan_at": "2026-10-30T13:56:21Z",
     "data_version": 2,
     "source_status": [
       {
         "source": "Google Jobs (SerpApi)",
-        "state": "partial",
+        "state": "ok",
         "fetched": 0,
         "matched": 0,
         "checked_queries": 2,
-        "empty_queries": 1,
-        "failed_queries": 1,
+        "empty_queries": 2,
+        "failed_queries": 0,
         "rotation_size": 40,
-        "query_failures": [
-          "New Orleans, Louisiana: HTTPSConnectionPool(host='serpapi.com', port=443): Read timed out. (read timeout=18)"
-        ],
+        "query_failures": [],
         "queries_per_run": 2
       },
       {
