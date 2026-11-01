@@ -1,21 +1,21 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-11-01T15:30:40Z",
+    "generated_at": "2026-11-01T16:34:05Z",
     "mode": "live",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
     "scan_state": "complete",
-    "last_scan_at": "2026-11-01T15:30:40Z",
+    "last_scan_at": "2026-11-01T16:34:05Z",
     "data_version": 2,
     "source_status": [
       {
         "source": "Google Jobs (SerpApi)",
         "state": "ok",
-        "fetched": 0,
-        "matched": 0,
+        "fetched": 1,
+        "matched": 1,
         "checked_queries": 2,
-        "empty_queries": 2,
+        "empty_queries": 1,
         "failed_queries": 0,
         "rotation_size": 40,
         "query_failures": [],
@@ -32,12 +32,37 @@
         "message": "Add USAJOBS_API_KEY and USAJOBS_EMAIL"
       }
     ],
-    "new_detected": 0,
-    "active_count": 0,
+    "new_detected": 1,
+    "active_count": 1,
     "monitored_sources": 1,
     "configured_sources": 1
   },
   "jobs": [
+    {
+      "title": "Neurointensivist",
+      "company": "PeaceHealth",
+      "location": "Springfield, OR",
+      "state": "OR",
+      "source": "Google Jobs (SerpApi)",
+      "sources": [
+        "Google Jobs (SerpApi)"
+      ],
+      "url": "https://www.monster.com/job-openings/neurointensivist-springfield-or--e40e87d7-4739-4355-a436-4081e609fa85",
+      "posted_at": null,
+      "updated_at": null,
+      "description": "Join an established Neurointensivist team (3 physicians and soon to be 4 APC team) and Comprehensive Stroke center at RiverBend Neuro ICU, providing 24 hour coverage at the largest hospital between Portland and Sacramento. We serve a large rural catchment area including the southwest, coastal Oregon as well as the surrounding Eugene/Springfield communities and regularly get referrals from critical access hospitals located in these areas. PeaceHealth is also a Level II trauma center with a focus on individualized pa",
+      "salary": "",
+      "employment_type": "",
+      "workplace": "",
+      "category": "Clinical",
+      "confidence": "High",
+      "visa_status": "not_stated",
+      "visa_evidence": "",
+      "status": "active",
+      "id": "ncc-6b80e87108df0993",
+      "first_seen": "2026-11-01T16:34:05Z",
+      "last_seen": "2026-11-01T16:34:05Z"
+    },
     {
       "title": "Neuro-Intensivist/Anesthesiologist (Assistant/Associate/Full Professor)",
       "company": "Oregon Health & Science University",
