@@ -1,21 +1,21 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-11-06T11:48:33Z",
+    "generated_at": "2026-11-06T12:57:16Z",
     "mode": "live",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
     "scan_state": "complete",
-    "last_scan_at": "2026-11-06T11:48:33Z",
+    "last_scan_at": "2026-11-06T12:57:16Z",
     "data_version": 2,
     "source_status": [
       {
         "source": "Google Jobs (SerpApi)",
         "state": "ok",
-        "fetched": 2,
-        "matched": 2,
+        "fetched": 0,
+        "matched": 0,
         "checked_queries": 2,
-        "empty_queries": 1,
+        "empty_queries": 2,
         "failed_queries": 0,
         "rotation_size": 40,
         "query_failures": [],
@@ -32,8 +32,8 @@
         "message": "Add USAJOBS_API_KEY and USAJOBS_EMAIL"
       }
     ],
-    "new_detected": 2,
-    "active_count": 2,
+    "new_detected": 0,
+    "active_count": 0,
     "monitored_sources": 1,
     "configured_sources": 1
   },
@@ -58,7 +58,7 @@
       "confidence": "High",
       "visa_status": "not_stated",
       "visa_evidence": "",
-      "status": "active",
+      "status": "not_recently_seen",
       "id": "ncc-918d5a38bafe7f9c",
       "first_seen": "2026-11-06T11:48:33Z",
       "last_seen": "2026-11-06T11:48:33Z"
@@ -83,7 +83,7 @@
       "confidence": "High",
       "visa_status": "not_stated",
       "visa_evidence": "",
-      "status": "active",
+      "status": "not_recently_seen",
       "id": "ncc-93cb5b2795321641",
       "first_seen": "2026-11-06T11:48:33Z",
       "last_seen": "2026-11-06T11:48:33Z"
