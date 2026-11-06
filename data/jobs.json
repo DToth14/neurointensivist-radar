@@ -1,21 +1,21 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-11-06T10:57:20Z",
+    "generated_at": "2026-11-06T11:48:33Z",
     "mode": "live",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
     "scan_state": "complete",
-    "last_scan_at": "2026-11-06T10:57:20Z",
+    "last_scan_at": "2026-11-06T11:48:33Z",
     "data_version": 2,
     "source_status": [
       {
         "source": "Google Jobs (SerpApi)",
         "state": "ok",
-        "fetched": 0,
-        "matched": 0,
+        "fetched": 2,
+        "matched": 2,
         "checked_queries": 2,
-        "empty_queries": 2,
+        "empty_queries": 1,
         "failed_queries": 0,
         "rotation_size": 40,
         "query_failures": [],
@@ -32,12 +32,62 @@
         "message": "Add USAJOBS_API_KEY and USAJOBS_EMAIL"
       }
     ],
-    "new_detected": 0,
-    "active_count": 0,
+    "new_detected": 2,
+    "active_count": 2,
     "monitored_sources": 1,
     "configured_sources": 1
   },
   "jobs": [
+    {
+      "title": "Academic Neurointensivist for Neurocritical Care & Research",
+      "company": "UTHealth Houston",
+      "location": "Houston, TX",
+      "state": "TX",
+      "source": "Google Jobs (SerpApi)",
+      "sources": [
+        "Google Jobs (SerpApi)"
+      ],
+      "url": "https://www.jobleads.com/us/job/academic-neurointensivist-for-neurocritical-care-research--houston--e43239bbf51ad917b3e793beb1b68e080",
+      "posted_at": null,
+      "updated_at": null,
+      "description": "McGovern Medical School at UTHealth Houston invites applications for a full-time clinical track Assistant/Associate Professor in the Department of Neurosurgery, Division of Neurocritical Care. This role focuses on high-acuity neurocritical care with opportunities for academic growth in clinical research, education, and translational studies. The successful candidate will contribute to program development, lead team initiatives, mentor staff and trainees, and participate in quality improvement,",
+      "salary": "",
+      "employment_type": "",
+      "workplace": "",
+      "category": "Academic",
+      "confidence": "High",
+      "visa_status": "not_stated",
+      "visa_evidence": "",
+      "status": "active",
+      "id": "ncc-918d5a38bafe7f9c",
+      "first_seen": "2026-11-06T11:48:33Z",
+      "last_seen": "2026-11-06T11:48:33Z"
+    },
+    {
+      "title": "Academic Neurointensivist Research",
+      "company": "Neurocritical Care",
+      "location": "Houston, TX",
+      "state": "TX",
+      "source": "Google Jobs (SerpApi)",
+      "sources": [
+        "Google Jobs (SerpApi)"
+      ],
+      "url": "https://www.learn4good.com/jobs/houston/texas/doctor_of_medicine/5582268524/e",
+      "posted_at": null,
+      "updated_at": null,
+      "description": "Position: Academic Neurointensivist - Neurocritical Care & Research University of Texas Health Science Center at Houston invites applications for an academic neurointensivist position within the Neurocritical Care division. The role emphasizes clinical excellence, teaching, and scholarly activity in a high-volume setting in Texas.Candidates should be neurology-trained with strong clinical skills and a track record or interest in research, including translational projects and clinical trials.The Academic Neurointens",
+      "salary": "",
+      "employment_type": "",
+      "workplace": "",
+      "category": "Academic",
+      "confidence": "High",
+      "visa_status": "not_stated",
+      "visa_evidence": "",
+      "status": "active",
+      "id": "ncc-93cb5b2795321641",
+      "first_seen": "2026-11-06T11:48:33Z",
+      "last_seen": "2026-11-06T11:48:33Z"
+    },
     {
       "title": "Neurointensivist",
       "company": "PeaceHealth",
