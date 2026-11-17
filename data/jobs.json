@@ -1,26 +1,24 @@
 {
   "meta": {
     "project": "Neurointensivist Radar",
-    "generated_at": "2026-11-17T14:14:35Z",
-    "mode": "error",
+    "generated_at": "2026-11-17T15:53:33Z",
+    "mode": "live",
     "note": "A monitored subset of publicly accessible job listings, not an exhaustive census. Date reflects detection time.",
     "scan_interval_minutes": 60,
-    "scan_state": "failed",
-    "last_scan_at": "2026-11-17T14:14:35Z",
+    "scan_state": "complete",
+    "last_scan_at": "2026-11-17T15:53:33Z",
     "data_version": 2,
     "source_status": [
       {
         "source": "Google Jobs (SerpApi)",
-        "state": "error",
-        "message": "All selected Google Jobs queries failed: Miami, Florida: HTTPSConnectionPool(host='serpapi.com', port=443): Read timed out. (read timeout=18) ; Miami, Florida: ",
+        "state": "ok",
+        "fetched": 0,
+        "matched": 0,
         "checked_queries": 2,
-        "empty_queries": 0,
-        "failed_queries": 2,
+        "empty_queries": 2,
+        "failed_queries": 0,
         "rotation_size": 40,
-        "query_failures": [
-          "Miami, Florida: HTTPSConnectionPool(host='serpapi.com', port=443): Read timed out. (read timeout=18)",
-          "Miami, Florida: HTTPSConnectionPool(host='serpapi.com', port=443): Read timed out. (read timeout=18)"
-        ],
+        "query_failures": [],
         "queries_per_run": 2
       },
       {
@@ -36,7 +34,7 @@
     ],
     "new_detected": 0,
     "active_count": 0,
-    "monitored_sources": 0,
+    "monitored_sources": 1,
     "configured_sources": 1
   },
   "jobs": [
